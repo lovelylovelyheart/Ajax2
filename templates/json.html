@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>json</title>
+    <style>
+        table{
+            border-collapse: collapse;
+            border: red solid 2px;
+            text-align: center;
+        }
+        th,td{
+            border: royalblue solid 2px;
+        }
+    </style>
+    <script src="../static/js/jquery-1.11.3.js"></script>
+    <script>
+        $(function () {
+            var arr = [{"name":"yangfan","age":12,"gender":"Male"},
+                {"name":"xiangyun","age":24,"gender":"Female"}];
+            $('#show').click(function () {
+                $(arr).each(function (i,json) {
+                    temp = "<tr><td>"+json.name+"</td><td>"+json.age+"</td><td>"+json.gender+"</td></tr>";
+                    $('table').append(temp)
+                });
+
+
+
+                });
+
+            $('#btnEach2').click(function () {
+                $(arr).each(function (i,obj){
+                    console.log(i);
+                    console.log(obj.name);
+                    console.log(obj.age);
+                    console.log(obj.gender);
+                });
+
+            });
+
+        });
+    </script>
+
+</head>
+<body>
+   <button id="show">显示所有</button>
+    <table>
+        <tr>
+        <th>姓名</th>
+        <th>年龄</th>
+        <th>性别</th>
+        </tr>
+    </table>
+    <button id="btnEach2">each</button>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>allusers</title>
+    <script src="/static/js/jquery-1.11.3.js"></script>
+    <script>
+        //信息显示请求函数
+           function showinfo() {
+                var xhr = new XMLHttpRequest();
+                xhr.open('get','/allusers?a=1',async=true);
+                xhr.onreadystatechange = function () {
+                   if (xhr.readyState==4 && xhr.status==200){
+                       var resText = xhr.responseText;
+                       console.log(resText);
+                       console.log(typeof resText);
+                       jsonArr = JSON.parse(resText);
+                       $(jsonArr).each(function (i,jsobj) {
+                           uid = jsobj.id;
+                           loginName = jsobj.loginName;
+                           upsd = jsobj.upsd;
+                           uname = jsobj.uname;
+                           html = '<tr><td>'+loginName+"</td><td>"
+                           +uname+"</td><td>"+upsd+"</td><td>"+
+                           "<button class='del' onclick='delInfo("+uid+")'>删除</button></td></tr>";
+                           $('#showinfo').append(html);
+                       })
+                       $('.del').css('background','#91f2ff');
+                   }
+                };
+                xhr.send(null);
+           }
+           //删除函数
+           function delInfo(uid) {
+               if (confirm('确认删除?')) {
+                   var xhrDel = new XMLHttpRequest();
+                    xhrDel.open('post','/allusers',async=true);
+                    xhrDel.onreadystatechange = function () {
+                   if (xhrDel.readyState==4 && xhrDel.status==200){
+                      var obj = JSON.parse(xhrDel.responseText);
+                           if (obj.status==1){
+                               $('#showinfo').html('');
+                               showinfo();
+                           }else{
+                               alert(obj.msg)
+                           }
+                   }
+               };
+               xhrDel.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+               xhrDel.send('uid='+uid)
+               }
+           }
+        $(function () {
+            //加载完毕时即刷新数据
+            showinfo();
+           });
+    </script>
+    <style>
+        table{
+            color:rebeccapurple;
+            border-collapse: collapse;
+            margin: 100px auto;
+            width: 400px;
+            border: darkblue dashed 2px;
+            text-align: center;
+        }
+        th,td{
+            border: royalblue dashed 1px;
+        }
+    </style>
+</head>
+<body>
+    <button id="btnAjax">请求用户信息</button>
+    <table>
+        <thead>
+        <tr>
+            <th onclick="">用户名</th>
+            <th>登录名</th>
+            <th>密码</th>
+            <th>删除</th>
+        </tr>
+        </thead>
+        <tbody id="showinfo">
+
+        </tbody>
+
+    </table>
+</body>
+</html>
